@@ -4,6 +4,8 @@ var App = {
 
   username: 'anonymous',
 
+  currentRoomName: $('#rooms select option:selected').text(),
+
   initialize: function() {
     App.username = window.location.search.substr(10);
 
@@ -20,8 +22,11 @@ var App = {
   fetch: function(callback = ()=>{}) {
     Parse.readAll((data) => {
       // examine the response from the server request:
-      console.log(data);
-
+      // console.log("This is from app.js: " +data);
+      Messages.data = data.results;
+      RoomsView.data = data.results;
+      // console.log(this.currentRoomName);
+      MessagesView.renderAllMessages(data.results, this.currentRoomName);
       callback();
     });
   },
@@ -34,5 +39,10 @@ var App = {
   stopSpinner: function() {
     App.$spinner.fadeOut('fast');
     FormView.setStatus(false);
-  }
+  },
+
+  // addFriend: function(){
+  //   MessagesView.addFriend();
+  // }
+
 };
